@@ -22,3 +22,5 @@ Replication with aws datasync, file permission and metadata are preserved (NFS P
 
 
 >Which AWS service is best suited to migrate a large amount of data from an S3 bucket to an EFS file system? AWS DATASYNC
+
+> So anytime at the exam you see a way to optimize the number of API calls made to an SQS queue and decrease of latency, think about long polling.
