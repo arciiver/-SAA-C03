@@ -197,3 +197,9 @@ volume application isci
 
 transfer familj, fpt ftps sftp 
 datasync NFS, SMB, HDFS, S3 API, etc. efs s3 fsx (all, netapp windows, tape volume )
+
+
+```markdown
+Choose FSx when you need a fully managed file system with specific features and protocol support.
+Use Storage Gateway when you need to integrate on-premises applications with AWS storage without significant changes to your existing infrastructure.
+```

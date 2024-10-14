@@ -24,3 +24,25 @@ Replication with aws datasync, file permission and metadata are preserved (NFS P
 >Which AWS service is best suited to migrate a large amount of data from an S3 bucket to an EFS file system? AWS DATASYNC
 
 > So anytime at the exam you see a way to optimize the number of API calls made to an SQS queue and decrease of latency, think about long polling.
+
+
+>Sns can have both sqs standard and FIFO queues as subscripbers
+
+Here is the content from the image in **Markdown** format:
+
+
+```markdown
+Amazon FSx for Lustre is designed for fast processing of workloads like machine learning and high-performance computing. It can be linked directly to data in Amazon S3.
+```
+
+```markdown
+Which Amazon FSx service would be most appropriate for a Linux-based workload that requires advanced data management features like snapshots, cloning, and data compression?
+
+A. Amazon FSx for OpenZFS
+```
+
+
+```markdown
+Choose FSx when you need a fully managed file system with specific features and protocol support.
+Use Storage Gateway when you need to integrate on-premises applications with AWS storage without significant changes to your existing infrastructure.
+```
