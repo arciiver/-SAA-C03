@@ -46,3 +46,14 @@ A. Amazon FSx for OpenZFS
 Choose FSx when you need a fully managed file system with specific features and protocol support.
 Use Storage Gateway when you need to integrate on-premises applications with AWS storage without significant changes to your existing infrastructure.
 ```
+
+
+```markdown
+Kinesis Data Firehouse - NEAR REAL-TIME
+```
+```markdown
+ECS - Task Role is defined in the **task definition**.
+
+```
+
+> Amason s3 can NOT be mounted as a file system on ECS

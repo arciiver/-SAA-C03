@@ -65,7 +65,7 @@
 # SNS
 ```markdown
 ## Subscribers
-- Kinesis
+- Kinesis FIREHOUSE (NOT KINESIS DATA STREAMS)
 - SQS
 - Lambda
 - Email
@@ -167,7 +167,7 @@
 
 ### Provisioned Mode:
 - You choose the number of shards provisioned, scale manually or using API.
-- Each shard gets **1 MB/s in** (or 1000 records per second).
+- Each shard gets **1 MB/s in** (or 1000 records per second). Encanced fan out 2mbit in
 - Each shard gets **2 MB/s out** (classic or enhanced fan-out consumer).
 - You pay per shard provisioned per hour.
 
@@ -181,3 +181,113 @@
 
 > Kinesis vpc endpoints is available. 
 
+```markdown
+## Kinesis Data Firehose
+
+- **Fully Managed Service**: No administration, automatic scaling, serverless.
+   - **AWS Producers**: Kinesis Data Stream / Kinesis Agent / Cloudwatch / Eventbridge, etc
+   - **AWS Destinations**: Redshift / Amazon S3 / OpenSearch
+   - **3rd Party Partners**: Splunk / MongoDB / DataDog / NewRelic / ...
+   - **Custom**: Send to any HTTP endpoint.
+
+- **Pricing**: Pay for data going through Firehose.
+
+- **Near Real-Time**:
+   - Buffer interval: 0 seconds (no buffering) to 900 seconds.
+   - Buffer size: Minimum 1MB - Max 128MB. - Hur stor datan kan vara innan den måste levereras till destinations. Den väntar inon interval tiden och sizen innan den levererar. 
+
+- **Supported Features**:
+   - Supports many data formats, conversions, transformations, and compression.
+   - Supports custom data transformations using AWS Lambda.
+   - Can send failed or all data to a backup S3 bucket.
+
+* After ingesting, you can optionaly transform your data with aws lambda
+```
+
+```markdown
+## Kinesis partition - partition key
+
+The partition key is important for ensuring ordering of data within a shard. All records with the same partition key will be written to the same shard, thus ensuring their order is preserved.A Partition Key is a key associated with each data record when it is written to a Kinesis stream.
+It determines which shard in the stream the data will be sent to.
+
+Let’s say you are ingesting streaming data of clickstreams from a website. You can use the user ID as the partition key. This ensures that all events (clicks, page views, etc.) for a specific user are stored in the same shard, maintaining the order of the events for that user.
+In Summary:
+
+    Partition: The shards in the stream where data is ingested.
+    Partition Key: A string assigned to each record that determines which shard the record is stored in. Helps in distributing data across shards and preserving order within a shard.
+```
+
+```markdown
+## Ordering Data into SQS
+
+- For **SQS Standard**, there is no ordering.
+- For **SQS FIFO**, if you don’t use a Group ID, messages are consumed in the order they are sent, with only one consumer.
+
+- You want to scale the number of consumers, but you want messages to be "grouped" when they are related to each other.
+- Then you use a **Group ID** (similar to **Partition Key** in Kinesis).
+```
+
+```markdown
+
+## Kinesis vs SQS Ordering
+
+Let’s assume 100 trucks, 5 Kinesis shards, 1 SQS FIFO.
+
+### Kinesis Data Streams:
+- On average, you'll have 20 trucks per shard.
+- Trucks will have their data ordered within each shard.
+- The maximum amount of consumers in parallel we can have is 5.
+- Can receive up to 5 MB/s of data.
+
+### SQS FIFO:
+- You only have one SQS FIFO queue.
+- You will have 100 Group IDs.
+- You can have up to 100 consumers (due to the 100 Group IDs).
+- You have up to 300 messages per second (or 3000 if using batching).
+```
+
+
+```markdown
+## SQS vs SNS vs Kinesis
+
+### SQS:
+- Consumer "pull data".
+- Data is deleted after being consumed.
+- Can have as many workers (consumers) as we want.
+- No need to provision throughput.
+- Ordering guarantees only on FIFO queues.
+- Individual message delay capability.
+
+### SNS:
+- Push data to many subscribers.
+- Up to 12,500,000 subscribers.
+- Data is not persisted (lost if not delivered).
+- Pub/Sub model.
+- Up to 100,000 topics.
+- No need to provision throughput.
+- Integrates with SQS for fan-out architecture pattern.
+- FIFO capability for SQS FIFO.
+
+### Kinesis:
+- **Standard**: Pull data (2 MB per shard).
+- **Enhanced fan-out**: Push data (2 MB per shard per consumer).
+- Possibility to replay data.
+- Meant for real-time big data, analytics, and ETL.
+- Ordering at the shard level.
+- Data expires after X days (configurable).
+- Provisioned mode or on-demand capacity mode.
+
+```
+
+## Amazon MQ
+
+- **SQS, SNS** are "cloud-native" services: proprietary protocols from AWS.
+- Traditional applications running from on-premises may use open protocols such as: **MQTT, AMQP, STOMP, Openwire, WSS**.
+- When migrating to the cloud, instead of re-engineering the application to use SQS and SNS, we can use **Amazon MQ**.
+- Amazon MQ is a managed message broker service for:
+  - **RabbitMQ**
+  - **ActiveMQ**
+
+- **Amazon MQ** doesn’t "scale" as much as SQS / SNS.
+- **Amazon MQ** runs on servers, can run in Multi-AZ with failover.
+- **Amazon MQ** has both **queue features** (~SQS) and **topic features** (~SNS).
