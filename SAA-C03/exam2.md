@@ -57,3 +57,5 @@ ECS - Task Role is defined in the **task definition**.
 ```
 
 > Amason s3 can NOT be mounted as a file system on ECS
+
+> LAMBDA  upp to 10 GB RAM per function - Increasing RAM will also improve CPU and network

@@ -64,9 +64,5 @@ Support for:
     - FSx for Lustre
     - FSx for Netapp ONTAP
 ```
+> AWS APP Runner - API and web application 
 
-
-```markdown```
-
-
-```markdown```
